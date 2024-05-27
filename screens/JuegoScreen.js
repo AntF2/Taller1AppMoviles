@@ -1,31 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useNavigation } from '@react-navigation/native'; 
 import Tarjeta from './Tarjeta';
 import { getDatabase, ref, set } from 'firebase/database';
 import { db } from '../config/Config';
 
 const cartas = [
-  "❤️",
-  "🎨",
-  "🐶",
-  "🌍",
-  "🏆",
-  "🎵",
-  "✈️",
-  "📷",
+  "❤️", 
+  "🎨", 
+  "🐶", 
+  "🌍", 
+  "🏆", 
+  "🎵", 
+  "✈️", 
+  "📷", 
   "🏠"
 ];
 
-const puntosBase = 50; 
+const puntosBase = 50;
 
 export default function JuegoScreen() {
+  const navigation = useNavigation(); 
   const [nombreJugador, setNombreJugador] = useState('');
   const [board, setBoard] = useState(() => shuffle([...cartas, ...cartas]));
   const [selectedCartas, setSelectedCartas] = useState([]);
   const [matchedCartas, setMatchedCartas] = useState([]);
   const [score, setScore] = useState(0);
-  const [tiempo, setTiempo] = useState(300); 
+  const [tiempo, setTiempo] = useState(300);
   const [juegoIniciado, setJuegoIniciado] = useState(false);
   const tiempoRef = useRef(null);
 
@@ -68,11 +70,11 @@ export default function JuegoScreen() {
        
         const puntosGanados = Math.floor(puntosBase * (tiempo / 300)); 
         setScore(score + puntosGanados);
-        setSelectedCartas([]); 
+        setSelectedCartas([]);
       } else {
         setTimeout(() => {
           setSelectedCartas([]);
-        }, 1000); 
+        }, 1000);
       }
     }
   }, [selectedCartas]);
@@ -91,7 +93,7 @@ export default function JuegoScreen() {
     setScore(0);
     setSelectedCartas([]);
     setBoard(shuffle([...cartas, ...cartas]));
-    setTiempo(300); 
+    setTiempo(300);
     setJuegoIniciado(false);
   };
 
@@ -107,6 +109,7 @@ export default function JuegoScreen() {
             placeholder="Nombre"
           />
           <Button title='Jugar' onPress={iniciarJuego} />
+          <Button title='Ver Mejores Puntuaciones' onPress={() => navigation.navigate('Puntuacion')} />
         </View>
       ) : (
         <>

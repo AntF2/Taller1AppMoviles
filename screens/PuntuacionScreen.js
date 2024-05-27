@@ -1,33 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-import { db } from '../config/Config'; 
-import { ref, get, orderByChild, limitToLast, query } from 'firebase/database'; 
-export default function ListaPuntajesScreen() {
-  const [puntajes, setPuntajes] = useState([]);
+// screens/PuntuacionScreen.js
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { getDatabase, ref, onValue } from 'firebase/database';
+import { db } from '../config/Config';
+
+export default function PuntuacionScreen() {
+  const [puntuaciones, setPuntuaciones] = useState([]);
 
   useEffect(() => {
     const dbRef = ref(db, 'jugadores');
-    const queryRef = query(dbRef, orderByChild('puntuacion'), limitToLast(10)); 
-    get(queryRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        const puntajesArray = [];
-        snapshot.forEach((childSnapshot) => {
-          const childData = childSnapshot.val();
-          puntajesArray.push(childData);
-        });
-        setPuntajes(puntajesArray);
-      }
-    }).catch((error) => {
-      console.error("Error al recuperar los puntajes: ", error);
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      const listaPuntuaciones = data ? Object.values(data) : [];
+      listaPuntuaciones.sort((a, b) => b.puntuacion - a.puntuacion); 
+      setPuntuaciones(listaPuntuaciones);
     });
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Mejores Puntajes</Text>
+      <Text style={styles.title}>Mejores Puntuaciones</Text>
       <FlatList
-        data={puntajes}
-        keyExtractor={(item, index) => index.toString()}
+        data={puntuaciones}
+        keyExtractor={(item) => item.nombre}
         renderItem={({ item }) => (
           <View style={styles.item}>
             <Text style={styles.nombre}>{item.nombre}</Text>
@@ -44,10 +39,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#0f172a',
+    paddingTop: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
+    color: 'white',
     fontWeight: 'bold',
     marginBottom: 20,
   },
@@ -55,16 +52,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    backgroundColor: '#1e293b',
+    padding: 15,
+    marginVertical: 8,
+    width: '90%',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
   },
   nombre: {
-    fontSize: 18,
+    fontSize: 20,
+    color: '#f8fafc',
+    fontWeight: '600',
   },
   puntuacion: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#f8fafc',
+    fontWeight: '600',
   },
 });
+

@@ -11,7 +11,7 @@ const Tab = createBottomTabNavigator();
 
 function MyTabs() {
   return (
-    <Tab.Navigator initialRouteName='Welcome'>
+    <Tab.Navigator initialRouteName='Juego'>
       <Tab.Screen name="Welcome" component={WelcomeScreen} />
       <Tab.Screen name="Login" component={LoginScreen} />
       <Tab.Screen name="Registro" component={RegistroScreen} />

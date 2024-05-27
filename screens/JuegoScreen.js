@@ -3,7 +3,7 @@ import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Tarjeta from './Tarjeta';
 import { getDatabase, ref, set } from 'firebase/database';
-import { db } from '../config/Config'; // Asegúrate de importar la configuración de Firebase
+import { db } from '../config/Config';
 
 const cartas = [
   "❤️",
@@ -17,7 +17,7 @@ const cartas = [
   "🏠"
 ];
 
-const puntosBase = 50; // Cantidad base de puntos por par encontrado
+const puntosBase = 50; 
 
 export default function JuegoScreen() {
   const [nombreJugador, setNombreJugador] = useState('');
@@ -25,7 +25,7 @@ export default function JuegoScreen() {
   const [selectedCartas, setSelectedCartas] = useState([]);
   const [matchedCartas, setMatchedCartas] = useState([]);
   const [score, setScore] = useState(0);
-  const [tiempo, setTiempo] = useState(300); // 5 minutos en segundos
+  const [tiempo, setTiempo] = useState(300); 
   const [juegoIniciado, setJuegoIniciado] = useState(false);
   const tiempoRef = useRef(null);
 
@@ -65,14 +65,14 @@ export default function JuegoScreen() {
       const [firstIndex, secondIndex] = selectedCartas;
       if (board[firstIndex] === board[secondIndex]) {
         setMatchedCartas([...matchedCartas, firstIndex, secondIndex]);
-        // Calcular la puntuación en función del tiempo restante
-        const puntosGanados = Math.floor(puntosBase * (tiempo / 300)); // 300 segundos son 5 minutos
+       
+        const puntosGanados = Math.floor(puntosBase * (tiempo / 300)); 
         setScore(score + puntosGanados);
-        setSelectedCartas([]); // Restablecer el estado de las cartas seleccionadas
+        setSelectedCartas([]); 
       } else {
         setTimeout(() => {
           setSelectedCartas([]);
-        }, 1000); // Voltear las cartas después de 1 segundo
+        }, 1000); 
       }
     }
   }, [selectedCartas]);
@@ -91,7 +91,7 @@ export default function JuegoScreen() {
     setScore(0);
     setSelectedCartas([]);
     setBoard(shuffle([...cartas, ...cartas]));
-    setTiempo(300); // Reiniciar el temporizador a 5 minutos
+    setTiempo(300); 
     setJuegoIniciado(false);
   };
 

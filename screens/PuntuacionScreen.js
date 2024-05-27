@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
-import { db } from '../config/Config'; // Asegúrate de importar la configuración de Firebase
-import { ref, get, orderByChild, limitToLast, query } from 'firebase/database'; // Importa la función query
-
+import { db } from '../config/Config'; 
+import { ref, get, orderByChild, limitToLast, query } from 'firebase/database'; 
 export default function ListaPuntajesScreen() {
   const [puntajes, setPuntajes] = useState([]);
 
   useEffect(() => {
     const dbRef = ref(db, 'jugadores');
-    const queryRef = query(dbRef, orderByChild('puntuacion'), limitToLast(10)); // Obtener los últimos 10 puntajes
+    const queryRef = query(dbRef, orderByChild('puntuacion'), limitToLast(10)); 
     get(queryRef).then((snapshot) => {
       if (snapshot.exists()) {
         const puntajesArray = [];

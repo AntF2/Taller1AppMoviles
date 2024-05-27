@@ -1,4 +1,3 @@
-// screens/PuntuacionScreen.js
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { getDatabase, ref, onValue } from 'firebase/database';
